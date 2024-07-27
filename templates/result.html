@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hate Speech Detection</title>
+</head>
+<body>
+    <h1>Hate Speech Detection</h1>
+    <form action="/detect" method="POST">
+        <input type="text" name="word" placeholder="Enter a word" required>
+        <button type="submit">Detect</button>
+    </form>
+    <div id="result"></div>
+    
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('/detect', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `<p>Word: ${data.word}</p>
+                                       <p>Is Hate Speech: ${data.is_hate_speech}</p>
+                                       <p>Why Hate: ${data.why_hate}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

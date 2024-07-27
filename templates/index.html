@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Detection</title>
+</head>
+<body>
+    <h1>Speech Detection</h1>
+    <form action="/predict" method="post">
+        <label for="language">Select Language:</label>
+        <select name="language" id="language">
+            <option value="english">English</option>
+            <option value="yoruba">Yoruba</option>
+            <option value="hausa">Hausa</option>
+            <option value="igbo">Igbo</option>
+        </select>
+        <br><br>
+        <label for="task">Select Task:</label>
+        <select name="task" id="task">
+            <option value="hate">Hate Speech</option>
+            <option value="offensive">Offensive Speech</option>
+        </select>
+        <br><br>
+        <label for="text">Enter Text:</label>
+        <textarea name="text" id="text" rows="4" cols="50"></textarea>
+        <br><br>
+        <input type="submit" value="Predict">
+    </form>
+</body>
+</html>
