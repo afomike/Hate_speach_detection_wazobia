@@ -39,7 +39,7 @@ def check_hate_speech(word, language):
     prediction = model.predict(X_word)[0]
     dataset = hate_words_datasets[language]
     if prediction == 1:
-        reason = dataset[dataset['Hate word'] == word]['Why Hate?'].values
+        reason = dataset[dataset['Hate words'] == word]['Why Hate?'].values
         return {
             'word': word,
             'is_hate_speech': True,
@@ -50,7 +50,6 @@ def check_hate_speech(word, language):
         'is_hate_speech': False,
         'why_hate': None
     }
-
 def check_offensive_speech(word, language):
     model = offensive_models[language]
     vectorizer = tfidf_vectorizers[language]
@@ -58,7 +57,7 @@ def check_offensive_speech(word, language):
     prediction = model.predict(X_word)[0]
     dataset = hate_words_datasets[language]
     if prediction == 1:
-        reason = dataset[dataset['Offensive'] == word]['Why offensive'].values
+        reason = dataset[dataset['Offensive words'] == word]['Why offensive?'].values
         return {
             'word': word,
             'is_offensive_speech': True,
@@ -80,7 +79,7 @@ def detect():
     task = request.form['task']
     word = request.form['word']
     result = {}
-
+    print(task)
     if task == 'hate':
         result = check_hate_speech(word, language)
     elif task == 'offensive':

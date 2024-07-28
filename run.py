@@ -13,31 +13,28 @@ hate_words_datasets = {
 }
 
 # Load the trained models for word detection (with updated paths)
-models = {
-    'yoruba': {
-        'hate': pickle.load(open('model/yoruba_hate_speech_yoruba_KNN.pkl', 'rb')),
-        'offensive': pickle.load(open('model/yoruba_offensive_speech_yoruba_KNN.pkl', 'rb'))
-    },
-    'hausa': {
-        'hate': pickle.load(open('model/hausa_hate_speech_hausa_KNN.pkl', 'rb')),
-        'offensive': pickle.load(open('model/hausa_offensive_speech_hausa_KNN.pkl', 'rb'))
-    },
-    'igbo': {
-        'hate': pickle.load(open('model/igbo_hate_speech_igbo_KNN.pkl', 'rb')),
-        'offensive': pickle.load(open('model/igbo_offensive_speech_igbo_KNN.pkl', 'rb'))
-    }
+hate_models = {
+    'yoruba': pickle.load(open('models/yoruba_hate_speech_yoruba_KNN.pkl', 'rb')),
+    'hausa': pickle.load(open('models/hausa_hate_speech_hausa_KNN.pkl', 'rb')),
+    'igbo': pickle.load(open('models/igbo_hate_speech_igbo_KNN.pkl', 'rb'))
+}
+
+offensive_models = {
+    'yoruba': pickle.load(open('models/yoruba_offensive_speech_yoruba_KNN.pkl', 'rb')),
+    'hausa': pickle.load(open('models/hausa_offensive_speech_hausa_KNN.pkl', 'rb')),
+    'igbo': pickle.load(open('models/igbo_offensive_speech_igbo_KNN.pkl', 'rb'))
 }
 
 # Load the vectorizers for each language (with updated paths)
 tfidf_vectorizers = {
-    'yoruba': pickle.load(open('model/yoruba_tfidf_vectorizer.pkl', 'rb')),
-    'hausa': pickle.load(open('model/hausa_tfidf_vectorizer.pkl', 'rb')),
-    'igbo': pickle.load(open('model/igbo_tfidf_vectorizer.pkl', 'rb'))
+    'yoruba': pickle.load(open('models/yoruba_tfidf_vectorizer.pkl', 'rb')),
+    'hausa': pickle.load(open('models/hausa_tfidf_vectorizer.pkl', 'rb')),
+    'igbo': pickle.load(open('models/igbo_tfidf_vectorizer.pkl', 'rb'))
 }
 
 def check_speech(word, language):
-    hate_model = models[language]['hate']
-    offensive_model = models[language]['offensive']
+    hate_model = hate_models[language]
+    offensive_model = offensive_models[language]
     vectorizer = tfidf_vectorizers[language]
     X_word = vectorizer.transform([word])
     
@@ -48,12 +45,12 @@ def check_speech(word, language):
     result = {'word': word, 'is_hate_speech': False, 'why_hate': None, 'is_offensive_speech': False, 'why_offensive': None}
     
     if hate_prediction == 1:
-        reason_hate = dataset[dataset['Hate word'] == word]['Why Hate?'].values
+        reason_hate = dataset[dataset['Hate words'] == word]['Why Hate?'].values
         result['is_hate_speech'] = True
         result['why_hate'] = reason_hate[0] if len(reason_hate) > 0 else "Reason not found in dataset"
         
     if offensive_prediction == 1:
-        reason_offensive = dataset[dataset['Offensive'] == word]['Why offensive'].values
+        reason_offensive = dataset[dataset['Offensive words'] == word]['Why offensive?'].values
         result['is_offensive_speech'] = True
         result['why_offensive'] = reason_offensive[0] if len(reason_offensive) > 0 else "Reason not found in dataset"
     
