@@ -8,22 +8,19 @@ app = Flask(__name__)
 
 # Load the hate words datasets for each language
 hate_words_datasets = {
-    'english': pd.read_csv('data/english_hate_words.csv'),
-    'yoruba': pd.read_csv('data/yoruba_hate_words.csv'),
-    'hausa': pd.read_csv('data/hausa_hate_words.csv'),
-    'igbo': pd.read_csv('data/igbo_hate_words.csv')
+    'yoruba': pd.read_csv('dataset/yoruba_hate_words.csv'),
+    'hausa': pd.read_csv('dataset/hausa_hate_words.csv'),
+    'igbo': pd.read_csv('dataset/igbo_hate_words.csv')
 }
 
 # Load the trained models for word detection (assuming models are language-specific as well)
 hate_models = {
-    'english': pickle.load(open('models/english_hate_speech_model.pkl', 'rb')),
     'yoruba': pickle.load(open('models/yoruba_hate_speech_model.pkl', 'rb')),
     'hausa': pickle.load(open('models/hausa_hate_speech_model.pkl', 'rb')),
     'igbo': pickle.load(open('models/igbo_hate_speech_model.pkl', 'rb'))
 }
 
 offensive_models = {
-    'english': pickle.load(open('models/english_offensive_speech_model.pkl', 'rb')),
     'yoruba': pickle.load(open('models/yoruba_offensive_speech_model.pkl', 'rb')),
     'hausa': pickle.load(open('models/hausa_offensive_speech_model.pkl', 'rb')),
     'igbo': pickle.load(open('models/igbo_offensive_speech_model.pkl', 'rb'))
