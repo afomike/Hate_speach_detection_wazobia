@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hate and Offensive Speech Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Word Detection</h1>
     <form id="detect-form" action="/detect" method="post">
         <label for="detect-language">Language:</label>
         <select id="detect-language" name="language">
-            <option value="english">English</option>
             <option value="yoruba">Yoruba</option>
             <option value="hausa">Hausa</option>
             <option value="igbo">Igbo</option>
