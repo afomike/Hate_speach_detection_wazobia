@@ -3,29 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech Detection</title>
+    <title>Hate and Offensive Speech Detection</title>
 </head>
 <body>
-    <h1>Speech Detection</h1>
-    <form action="/predict" method="post">
-        <label for="language">Select Language:</label>
-        <select name="language" id="language">
+    <h1>Word Detection</h1>
+    <form id="detect-form" action="/detect" method="post">
+        <label for="detect-language">Language:</label>
+        <select id="detect-language" name="language">
             <option value="english">English</option>
             <option value="yoruba">Yoruba</option>
             <option value="hausa">Hausa</option>
             <option value="igbo">Igbo</option>
         </select>
-        <br><br>
-        <label for="task">Select Task:</label>
-        <select name="task" id="task">
+        <br>
+        <label for="detect-task">Task:</label>
+        <select id="detect-task" name="task">
             <option value="hate">Hate Speech</option>
             <option value="offensive">Offensive Speech</option>
         </select>
-        <br><br>
-        <label for="text">Enter Text:</label>
-        <textarea name="text" id="text" rows="4" cols="50"></textarea>
-        <br><br>
-        <input type="submit" value="Predict">
+        <br>
+        <label for="word">Word:</label>
+        <input type="text" id="word" name="word" placeholder="Enter a word" required>
+        <br>
+        <button type="submit">Detect</button>
     </form>
+    <div id="result"></div>
+    
+    <script>
+        document.querySelector('#detect-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('/detect', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let resultDiv = document.getElementById('result');
+                let resultContent = `<p>Word: ${data.word}</p>`;
+                if ('is_hate_speech' in data) {
+                    resultContent += `<p>Is Hate Speech: ${data.is_hate_speech}</p>
+                                      <p>Why Hate: ${data.why_hate}</p>`;
+                } else if ('is_offensive_speech' in data) {
+                    resultContent += `<p>Is Offensive Speech: ${data.is_offensive_speech}</p>
+                                      <p>Why Offensive: ${data.why_offensive}</p>`;
+                }
+                resultDiv.innerHTML = resultContent;
+            });
+        });
+    </script>
 </body>
 </html>
