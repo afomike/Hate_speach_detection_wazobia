@@ -16,22 +16,22 @@ hate_words_datasets = {
 
 # Load the trained models for word detection (with updated paths)
 hate_models = {
-    'yoruba': pickle.load(open('model/yoruba_hate_speech_yoruba_KNN.pkl', 'rb')),
-    'hausa': pickle.load(open('model/hausa_hate_speech_hausa_KNN.pkl', 'rb')),
-    'igbo': pickle.load(open('model/igbo_hate_speech_igbo_KNN.pkl', 'rb'))
+    'yoruba': pickle.load(open('models/yoruba_hate_speech_yoruba_KNN.pkl', 'rb')),
+    'hausa': pickle.load(open('models/hausa_hate_speech_hausa_KNN.pkl', 'rb')),
+    'igbo': pickle.load(open('models/igbo_hate_speech_igbo_KNN.pkl', 'rb'))
 }
 
 offensive_models = {
-    'yoruba': pickle.load(open('model/yoruba_offensive_speech_yoruba_KNN.pkl', 'rb')),
-    'hausa': pickle.load(open('model/hausa_offensive_speech_hausa_KNN.pkl', 'rb')),
-    'igbo': pickle.load(open('model/igbo_offensive_speech_igbo_KNN.pkl', 'rb'))
+    'yoruba': pickle.load(open('models/yoruba_offensive_speech_yoruba_KNN.pkl', 'rb')),
+    'hausa': pickle.load(open('models/hausa_offensive_speech_hausa_KNN.pkl', 'rb')),
+    'igbo': pickle.load(open('models/igbo_offensive_speech_igbo_KNN.pkl', 'rb'))
 }
 
 # Load the vectorizers for each language (with updated paths)
 tfidf_vectorizers = {
-    'yoruba': pickle.load(open('model/yoruba_tfidf_vectorizer.pkl', 'rb')),
-    'hausa': pickle.load(open('model/hausa_tfidf_vectorizer.pkl', 'rb')),
-    'igbo': pickle.load(open('model/igbo_tfidf_vectorizer.pkl', 'rb'))
+    'yoruba': pickle.load(open('models/yoruba_tfidf_vectorizer.pkl', 'rb')),
+    'hausa': pickle.load(open('models/hausa_tfidf_vectorizer.pkl', 'rb')),
+    'igbo': pickle.load(open('models/igbo_tfidf_vectorizer.pkl', 'rb'))
 }
 
 def find_similar_word(word, words_list, vectorizer):
