@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify, render_template
 import pandas as pd
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 app = Flask(__name__)
 
@@ -14,23 +16,36 @@ hate_words_datasets = {
 
 # Load the trained models for word detection (with updated paths)
 hate_models = {
-    'yoruba': pickle.load(open('models/yoruba_hate_speech_yoruba_KNN.pkl', 'rb')),
-    'hausa': pickle.load(open('models/hausa_hate_speech_hausa_KNN.pkl', 'rb')),
-    'igbo': pickle.load(open('models/igbo_hate_speech_igbo_KNN.pkl', 'rb'))
+    'yoruba': pickle.load(open('model/yoruba_hate_speech_yoruba_KNN.pkl', 'rb')),
+    'hausa': pickle.load(open('model/hausa_hate_speech_hausa_KNN.pkl', 'rb')),
+    'igbo': pickle.load(open('model/igbo_hate_speech_igbo_KNN.pkl', 'rb'))
 }
 
 offensive_models = {
-    'yoruba': pickle.load(open('models/yoruba_offensive_speech_yoruba_KNN.pkl', 'rb')),
-    'hausa': pickle.load(open('models/hausa_offensive_speech_hausa_KNN.pkl', 'rb')),
-    'igbo': pickle.load(open('models/igbo_offensive_speech_igbo_KNN.pkl', 'rb'))
+    'yoruba': pickle.load(open('model/yoruba_offensive_speech_yoruba_KNN.pkl', 'rb')),
+    'hausa': pickle.load(open('model/hausa_offensive_speech_hausa_KNN.pkl', 'rb')),
+    'igbo': pickle.load(open('model/igbo_offensive_speech_igbo_KNN.pkl', 'rb'))
 }
 
 # Load the vectorizers for each language (with updated paths)
 tfidf_vectorizers = {
-    'yoruba': pickle.load(open('models/yoruba_tfidf_vectorizer.pkl', 'rb')),
-    'hausa': pickle.load(open('models/hausa_tfidf_vectorizer.pkl', 'rb')),
-    'igbo': pickle.load(open('models/igbo_tfidf_vectorizer.pkl', 'rb'))
+    'yoruba': pickle.load(open('model/yoruba_tfidf_vectorizer.pkl', 'rb')),
+    'hausa': pickle.load(open('model/hausa_tfidf_vectorizer.pkl', 'rb')),
+    'igbo': pickle.load(open('model/igbo_tfidf_vectorizer.pkl', 'rb'))
 }
+
+def find_similar_word(word, words_list, vectorizer):
+    # Vectorize the words
+    word_vec = vectorizer.transform([word])
+    words_vecs = vectorizer.transform(words_list)
+    
+    # Compute cosine similarity
+    similarities = cosine_similarity(word_vec, words_vecs).flatten()
+    
+    # Find the index of the most similar word
+    most_similar_index = np.argmax(similarities)
+    
+    return words_list[most_similar_index], similarities[most_similar_index]
 
 def check_speech(word, language):
     hate_model = hate_models[language]
@@ -46,13 +61,25 @@ def check_speech(word, language):
     
     if hate_prediction == 1:
         reason_hate = dataset[dataset['Hate words'] == word]['Why Hate?'].values
-        result['is_hate_speech'] = True
-        result['why_hate'] = reason_hate[0] if len(reason_hate) > 0 else "Reason not found in dataset"
+        if len(reason_hate) > 0:
+            result['is_hate_speech'] = True
+            result['why_hate'] = reason_hate[0]
+        else:
+            similar_word, similarity = find_similar_word(word, dataset['Hate words'].tolist(), vectorizer)
+            reason_hate = dataset[dataset['Hate words'] == similar_word]['Why Hate?'].values
+            result['is_hate_speech'] = True
+            result['why_hate'] = f"Similar to '{similar_word}' (similarity: {similarity:.2f}): {reason_hate[0]}"
         
     if offensive_prediction == 1:
         reason_offensive = dataset[dataset['Offensive words'] == word]['Why offensive?'].values
-        result['is_offensive_speech'] = True
-        result['why_offensive'] = reason_offensive[0] if len(reason_offensive) > 0 else "Reason not found in dataset"
+        if len(reason_offensive) > 0:
+            result['is_offensive_speech'] = True
+            result['why_offensive'] = reason_offensive[0]
+        else:
+            similar_word, similarity = find_similar_word(word, dataset['Offensive words'].tolist(), vectorizer)
+            reason_offensive = dataset[dataset['Offensive words'] == similar_word]['Why offensive?'].values
+            result['is_offensive_speech'] = True
+            result['why_offensive'] = f"Similar to '{similar_word}' (similarity: {similarity:.2f}): {reason_offensive[0]}"
     
     return result
 
