@@ -43,7 +43,7 @@ def check_hate_speech(word, language):
         return {
             'word': word,
             'is_hate_speech': True,
-            'why_hate': reason[0] if len(reason) > 0 else "Reason not found in dataset"
+            'why_hate': reason[0] if len(reason) > 0 else "Reason can not be concluded"
         }
     return {
         'word': word,
@@ -61,7 +61,7 @@ def check_offensive_speech(word, language):
         return {
             'word': word,
             'is_offensive_speech': True,
-            'why_offensive': reason[0] if len(reason) > 0 else "Reason not found in dataset"
+            'why_offensive': reason[0] if len(reason) > 0 else "Reason can not be concluded"
         }
     return {
         'word': word,
