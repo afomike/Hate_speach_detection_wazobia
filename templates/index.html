@@ -1,56 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hate and Offensive Speech Detection</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NaijaDetect — Hate & Offensive Speech Detection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Word Detection</h1>
-    <form id="detect-form" action="/detect" method="post">
-        <label for="detect-language">Language:</label>
-        <select id="detect-language" name="language">
-            <option value="yoruba">Yoruba</option>
-            <option value="hausa">Hausa</option>
-            <option value="igbo">Igbo</option>
-        </select>
-        <br>
-        <label for="detect-task">Task:</label>
-        <select id="detect-task" name="task">
-            <option value="hate">Hate Speech</option>
-            <option value="offensive">Offensive Speech</option>
-        </select>
-        <br>
-        <label for="word">Word:</label>
-        <input type="text" id="word" name="word" placeholder="Enter a word" required>
-        <br>
-        <button type="submit">Detect</button>
-    </form>
-    <div id="result"></div>
-    
-    <script>
-        document.querySelector('#detect-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            fetch('/detect', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                let resultDiv = document.getElementById('result');
-                let resultContent = `<p>Word: ${data.word}</p>`;
-                if ('is_hate_speech' in data) {
-                    resultContent += `<p>Is Hate Speech: ${data.is_hate_speech}</p>
-                                      <p>Why Hate: ${data.why_hate}</p>`;
-                } else if ('is_offensive_speech' in data) {
-                    resultContent += `<p>Is Offensive Speech: ${data.is_offensive_speech}</p>
-                                      <p>Why Offensive: ${data.why_offensive}</p>`;
-                }
-                resultDiv.innerHTML = resultContent;
-            });
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="nav-logo">🛡️</div>
+      <span class="nav-name">Naija<span>Detect</span></span>
+    </a>
+    <span class="nav-pill">Model Live</span>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-badge">NLP · Nigerian Languages · Real-Time Detection</div>
+    <h1>Detect <span class="ac">hate speech</span> in<br><span class="acv">Nigerian languages</span></h1>
+    <p class="hero-sub">
+      The first machine learning tool that classifies hate and offensive speech across Yoruba, Hausa, and Igbo — powering safer communities and content moderation at scale.
+    </p>
+    <div class="lang-badges">
+      <span class="lang-badge lb-y">🟡 Yoruba</span>
+      <span class="lang-badge lb-h">🟢 Hausa</span>
+      <span class="lang-badge lb-i">🟣 Igbo</span>
+    </div>
+    <div class="cta-group">
+      <a href="#detect" class="btn-primary">Try the Demo →</a>
+      <a href="#how-it-works" class="btn-secondary">How it works</a>
+    </div>
+  </section>
+
+  <!-- ── Capabilities Strip ── -->
+  <section class="capabilities">
+    <span class="section-eyebrow">What it does</span>
+    <h2 class="section-title">Built for African language NLP</h2>
+    <div class="cap-grid">
+      <div class="cap-item">
+        <div class="cap-icon">🌍</div>
+        <div class="cap-title">3 Languages</div>
+        <p class="cap-desc">Yoruba, Hausa, and Igbo — Nigeria's most spoken languages.</p>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">🧠</div>
+        <div class="cap-title">ML Classification</div>
+        <p class="cap-desc">Trained classifier distinguishes hate, offensive, and safe speech.</p>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">⚡</div>
+        <div class="cap-title">Real-Time Results</div>
+        <p class="cap-desc">Instant classification with explanation for every query.</p>
+      </div>
+      <div class="cap-item">
+        <div class="cap-icon">🔍</div>
+        <div class="cap-title">Dual Tasks</div>
+        <p class="cap-desc">Separate detection modes for hate speech and offensive speech.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section class="steps-section" id="how-it-works">
+    <span class="section-eyebrow">How to use</span>
+    <h2 class="section-title">Run a detection in 4 steps</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-num">STEP 01</span>
+        <span class="step-icon">🌐</span>
+        <div class="step-title">Select a language</div>
+        <p class="step-desc">Choose from Yoruba, Hausa, or Igbo — each uses a dedicated trained model.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">STEP 02</span>
+        <span class="step-icon">🎯</span>
+        <div class="step-title">Choose a task</div>
+        <p class="step-desc">Select "Hate Speech" or "Offensive Speech" depending on what you want to detect.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">STEP 03</span>
+        <span class="step-icon">✍️</span>
+        <div class="step-title">Enter your word</div>
+        <p class="step-desc">Type the word or phrase you want to analyse in the input field below.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">STEP 04</span>
+        <span class="step-icon">📊</span>
+        <div class="step-title">Read the result</div>
+        <p class="step-desc">The model returns a classification — hate, offensive, or safe — with an explanation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Detection Form ── -->
+  <section class="detect-section" id="detect">
+    <div class="detect-card">
+      <div class="detect-card-header">
+        <h2>Run a Detection</h2>
+        <p>Enter any word to classify it using the trained model</p>
+      </div>
+
+      <form id="detect-form" action="/detect" method="post">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="detect-language">Language</label>
+            <select id="detect-language" name="language">
+              <option value="yoruba">Yoruba</option>
+              <option value="hausa">Hausa</option>
+              <option value="igbo">Igbo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="detect-task">Task</label>
+            <select id="detect-task" name="task">
+              <option value="hate">Hate Speech</option>
+              <option value="offensive">Offensive Speech</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group input-full">
+          <label for="word">Word or Phrase</label>
+          <input type="text" id="word" name="word" placeholder="Enter a word to analyse…" required>
+        </div>
+
+        <button type="submit">Analyse Word →</button>
+      </form>
+
+      <div class="loading-spinner" id="loadingSpinner"></div>
+      <div id="result"></div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p>© 2025 NaijaDetect · Built with Python, Flask & Machine Learning · Nigerian Language NLP Research</p>
+  </footer>
+
+  <script>
+    document.querySelector('#detect-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const spinner = document.getElementById('loadingSpinner');
+      const resultDiv = document.getElementById('result');
+      spinner.style.display = 'block';
+      resultDiv.innerHTML = '';
+
+      const formData = new FormData(this);
+
+      fetch('/detect', { method: 'POST', body: formData })
+        .then(response => response.json())
+        .then(data => {
+          spinner.style.display = 'none';
+
+          let isHate = false, isOffensive = false, label = '', why = '';
+
+          if ('is_hate_speech' in data) {
+            isHate = data.is_hate_speech;
+            why = data.why_hate || '';
+            label = isHate ? 'hate' : 'safe';
+          } else if ('is_offensive_speech' in data) {
+            isOffensive = data.is_offensive_speech;
+            why = data.why_offensive || '';
+            label = isOffensive ? 'offensive' : 'safe';
+          }
+
+          const badgeText = label === 'hate' ? '⚠ Hate Speech Detected'
+                          : label === 'offensive' ? '⚡ Offensive Speech Detected'
+                          : '✓ Safe';
+
+          resultDiv.innerHTML = `
+            <div class="result-box ${label}">
+              <div class="result-header">
+                <span class="result-badge ${label}">${badgeText}</span>
+                <span class="result-word">"${data.word}"</span>
+              </div>
+              ${why ? `<div class="result-reason"><strong>Explanation:</strong> ${why}</div>` : ''}
+            </div>`;
+        })
+        .catch(() => {
+          spinner.style.display = 'none';
+          resultDiv.innerHTML = `<div class="result-box"><div class="result-reason" style="color:var(--red)">Error: Unable to reach the detection model. Please try again.</div></div>`;
         });
-    </script>
+    });
+  </script>
 </body>
 </html>
